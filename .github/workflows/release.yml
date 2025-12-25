@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            npm_package: goback-darwin-arm64
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            npm_package: goback-darwin-x64
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            npm_package: goback-linux-x64-gnu
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            npm_package: goback-win32-x64-msvc
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Prepare binary (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cp target/${{ matrix.target }}/release/goback npm/${{ matrix.npm_package }}/bin/goback
+          chmod +x npm/${{ matrix.npm_package }}/bin/goback
+
+      - name: Prepare binary (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cp target/${{ matrix.target }}/release/goback.exe npm/${{ matrix.npm_package }}/bin/goback.exe
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.npm_package }}
+          path: npm/${{ matrix.npm_package }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: npm-packages
+
+      - name: Move packages
+        run: |
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+            rm -rf npm/$pkg
+            mv npm-packages/$pkg npm/$pkg
+          done
+
+      - name: Publish platform packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+            cd npm/$pkg
+            npm publish --access public || true
+            cd ../..
+          done
+
+      - name: Publish main package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd npm/goback
+          npm publish --access public

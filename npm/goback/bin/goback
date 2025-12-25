@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+
+const { execFileSync } = require("child_process");
+
+const PLATFORMS = {
+  "darwin-arm64": "goback-darwin-arm64",
+  "darwin-x64": "goback-darwin-x64",
+  "linux-x64": "goback-linux-x64-gnu",
+  "win32-x64": "goback-win32-x64-msvc",
+};
+
+function getBinaryPath() {
+  const platformKey = `${process.platform}-${process.arch}`;
+  const packageName = PLATFORMS[platformKey];
+
+  if (!packageName) {
+    throw new Error(`Unsupported platform: ${platformKey}`);
+  }
+
+  const binaryName = process.platform === "win32" ? "goback.exe" : "goback";
+
+  try {
+    const binaryPath = require.resolve(`${packageName}/bin/${binaryName}`);
+    return binaryPath;
+  } catch (e) {
+    throw new Error(
+      `Failed to find binary for ${platformKey}. ` +
+      `Package '${packageName}' may not be installed.`
+    );
+  }
+}
+
+function main() {
+  const binaryPath = getBinaryPath();
+  const args = process.argv.slice(2);
+
+  try {
+    execFileSync(binaryPath, args, { stdio: "inherit" });
+  } catch (e) {
+    if (e.status !== undefined) {
+      process.exit(e.status);
+    }
+    throw e;
+  }
+}
+
+main();

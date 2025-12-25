@@ -1,0 +1,9 @@
+{
+  "name": "goback-linux-x64-gnu",
+  "version": "0.1.0",
+  "description": "goback binary for Linux x64 (glibc)",
+  "os": ["linux"],
+  "cpu": ["x64"],
+  "license": "MIT",
+  "files": ["bin"]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "goback",
+  "version": "0.1.0",
+  "description": "Go back to a previous git branch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/goback"
+  },
+  "license": "MIT",
+  "bin": {
+    "goback": "bin/goback"
+  },
+  "files": [
+    "bin"
+  ],
+  "optionalDependencies": {
+    "goback-darwin-arm64": "0.1.0",
+    "goback-darwin-x64": "0.1.0",
+    "goback-linux-x64-gnu": "0.1.0",
+    "goback-win32-x64-msvc": "0.1.0"
+  },
+  "keywords": [
+    "git",
+    "branch",
+    "checkout",
+    "cli"
+  ]
+}
