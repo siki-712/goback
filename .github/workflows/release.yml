@@ -42,12 +42,14 @@ jobs:
       - name: Prepare binary (Unix)
         if: matrix.os != 'windows-latest'
         run: |
+          mkdir -p npm/${{ matrix.npm_package }}/bin
           cp target/${{ matrix.target }}/release/goback npm/${{ matrix.npm_package }}/bin/goback
           chmod +x npm/${{ matrix.npm_package }}/bin/goback
 
       - name: Prepare binary (Windows)
         if: matrix.os == 'windows-latest'
         run: |
+          New-Item -ItemType Directory -Force -Path npm/${{ matrix.npm_package }}/bin
           cp target/${{ matrix.target }}/release/goback.exe npm/${{ matrix.npm_package }}/bin/goback.exe
 
       - name: Upload artifact
