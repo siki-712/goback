@@ -1,1 +1,4 @@
 /target
+
+# Built binaries
+npm/goback-*/bin/
