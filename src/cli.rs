@@ -1,3 +1,4 @@
+use crate::table::Table;
 use std::process::exit;
 
 pub struct Args {
@@ -66,12 +67,13 @@ pub fn print_list(history: &[String], count: usize) {
         return;
     }
 
+    let mut table = Table::new(vec!["#", "Branch", "Status"]);
+
     let display_count = count.min(history.len());
     for (i, branch) in history.iter().take(display_count).enumerate() {
-        if i == 0 {
-            println!("  {} : {} (current)", i, branch);
-        } else {
-            println!("  {} : {}", i, branch);
-        }
+        let status = if i == 0 { "current" } else { "" };
+        table.add_row(vec![i.to_string(), branch.clone(), status.to_string()]);
     }
+
+    print!("{}", table.render());
 }

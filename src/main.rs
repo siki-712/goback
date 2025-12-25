@@ -1,6 +1,7 @@
 mod cli;
 mod git;
 mod reflog;
+mod table;
 
 use std::process::exit;
 
