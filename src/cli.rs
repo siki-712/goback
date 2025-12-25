@@ -72,10 +72,14 @@ pub fn print_list(history: &[String], count: usize) {
 
     let display_count = count.min(history.len());
     for (i, branch) in history.iter().take(display_count).enumerate() {
-        let num = Cell::colored(color::green_light(&i.to_string()), i.to_string().len());
-        let branch_cell = Cell::new(branch);
+        let num = Cell::colored(color::muted(&i.to_string()), i.to_string().len());
+        let branch_cell = if i == 0 {
+            Cell::colored(color::cyan(branch), branch.len())
+        } else {
+            Cell::new(branch)
+        };
         let status = if i == 0 {
-            Cell::colored(color::green_light("current"), 7)
+            Cell::colored(color::green("current"), 7)
         } else {
             Cell::new("")
         };

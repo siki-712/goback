@@ -30,7 +30,7 @@ impl Table {
         Self {
             headers: headers
                 .into_iter()
-                .map(|s| Cell::colored(color::green(s), s.len()))
+                .map(|s| Cell::colored(color::muted(s), s.len()))
                 .collect(),
             rows: Vec::new(),
         }
@@ -84,39 +84,39 @@ impl Table {
 
     fn render_dotted_border(&self, widths: &[usize]) -> String {
         let mut line = String::new();
-        line.push_str(&color::gray("├"));
+        line.push_str(&color::dim("├"));
 
         for (i, &width) in widths.iter().enumerate() {
-            line.push_str(&color::gray(&"╌".repeat(width + 2)));
+            line.push_str(&color::dim(&"╌".repeat(width + 2)));
             if i < widths.len() - 1 {
-                line.push_str(&color::gray("┼"));
+                line.push_str(&color::dim("┼"));
             }
         }
 
-        line.push_str(&color::gray("┤"));
+        line.push_str(&color::dim("┤"));
         line.push('\n');
         line
     }
 
     fn render_border(&self, widths: &[usize], left: char, mid: char, right: char) -> String {
         let mut line = String::new();
-        line.push_str(&color::gray(&left.to_string()));
+        line.push_str(&color::dim(&left.to_string()));
 
         for (i, &width) in widths.iter().enumerate() {
-            line.push_str(&color::gray(&"─".repeat(width + 2)));
+            line.push_str(&color::dim(&"─".repeat(width + 2)));
             if i < widths.len() - 1 {
-                line.push_str(&color::gray(&mid.to_string()));
+                line.push_str(&color::dim(&mid.to_string()));
             }
         }
 
-        line.push_str(&color::gray(&right.to_string()));
+        line.push_str(&color::dim(&right.to_string()));
         line.push('\n');
         line
     }
 
     fn render_row(&self, cells: &[Cell], widths: &[usize]) -> String {
         let mut line = String::new();
-        line.push_str(&color::gray("│"));
+        line.push_str(&color::dim("│"));
 
         for (i, width) in widths.iter().enumerate() {
             let cell = cells.get(i);
@@ -124,7 +124,7 @@ impl Table {
             let cell_width = cell.map(|c| c.width).unwrap_or(0);
             let padding = width - cell_width;
             line.push_str(&format!(" {}{} ", text, " ".repeat(padding)));
-            line.push_str(&color::gray("│"));
+            line.push_str(&color::dim("│"));
         }
 
         line.push('\n');
