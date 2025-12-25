@@ -36,10 +36,17 @@ goback -l 5
 
 ```bash
 $ goback -l
-  0 : feature/new-feature (current)
-  1 : develop
-  2 : main
-  3 : feature/old-feature
+╭───┬─────────────────────┬─────────╮
+│ # │ Branch              │ Status  │
+├───┼─────────────────────┼─────────┤
+│ 0 │ feature/new-feature │ current │
+├╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤
+│ 1 │ develop             │         │
+├╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤
+│ 2 │ main                │         │
+├╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤
+│ 3 │ feature/old-feature │         │
+╰───┴─────────────────────┴─────────╯
 
 $ goback 2
 Switched to branch 'main'

@@ -1,5 +1,5 @@
-/// checkout履歴からブランチの訪問履歴を抽出
-/// 返り値: [現在のブランチ, 1つ前, 2つ前, ...]
+/// Extracts branch visit history from checkout history.
+/// Returns: [current branch, 1 step back, 2 steps back, ...]
 pub fn extract_branch_history(reflog: &str) -> Vec<String> {
     let mut history = Vec::new();
 
@@ -10,11 +10,11 @@ pub fn extract_branch_history(reflog: &str) -> Vec<String> {
                 let from_branch = &rest[..to_pos];
                 let to_branch = &rest[to_pos + " to ".len()..];
 
-                // 最初のcheckoutなら、toが現在のブランチ
+                // If this is the first checkout, 'to' is the current branch
                 if history.is_empty() {
                     history.push(to_branch.to_string());
                 }
-                // fromが1つ前にいたブランチ
+                // 'from' is the branch we were on before
                 history.push(from_branch.to_string());
             }
         }
@@ -23,7 +23,7 @@ pub fn extract_branch_history(reflog: &str) -> Vec<String> {
     history
 }
 
-/// N個前のブランチを取得
+/// Gets the branch N steps back
 pub fn get_nth_previous_branch(history: &[String], n: usize) -> Option<&String> {
     history.get(n)
 }
@@ -43,10 +43,10 @@ m3n4o5p6 HEAD@{3}: checkout: moving from develop to main
         let history = extract_branch_history(reflog);
 
         assert_eq!(history.len(), 4);
-        assert_eq!(history[0], "feature/fix_rake"); // 現在
-        assert_eq!(history[1], "feature/fix_board"); // 1つ前
-        assert_eq!(history[2], "main"); // 2つ前
-        assert_eq!(history[3], "develop"); // 3つ前
+        assert_eq!(history[0], "feature/fix_rake"); // current
+        assert_eq!(history[1], "feature/fix_board"); // 1 step back
+        assert_eq!(history[2], "main"); // 2 steps back
+        assert_eq!(history[3], "develop"); // 3 steps back
     }
 
     #[test]
