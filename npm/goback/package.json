@@ -1,6 +1,6 @@
 {
   "name": "goback",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Go back to a previous git branch",
   "repository": {
     "type": "git",
