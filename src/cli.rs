@@ -1,4 +1,5 @@
-use crate::table::Table;
+use crate::color;
+use crate::table::{Cell, Table};
 use std::process::exit;
 
 pub struct Args {
@@ -71,8 +72,14 @@ pub fn print_list(history: &[String], count: usize) {
 
     let display_count = count.min(history.len());
     for (i, branch) in history.iter().take(display_count).enumerate() {
-        let status = if i == 0 { "current" } else { "" };
-        table.add_row(vec![i.to_string(), branch.clone(), status.to_string()]);
+        let num = Cell::colored(color::green_light(&i.to_string()), i.to_string().len());
+        let branch_cell = Cell::new(branch);
+        let status = if i == 0 {
+            Cell::colored(color::green_light("current"), 7)
+        } else {
+            Cell::new("")
+        };
+        table.add_row(vec![num, branch_cell, status]);
     }
 
     print!("{}", table.render());

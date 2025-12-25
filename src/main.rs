@@ -1,4 +1,5 @@
 mod cli;
+mod color;
 mod git;
 mod reflog;
 mod table;
