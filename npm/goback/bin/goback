@@ -6,7 +6,7 @@ const PLATFORMS = {
   "darwin-arm64": "goback-darwin-arm64",
   "darwin-x64": "goback-darwin-x64",
   "linux-x64": "goback-linux-x64-gnu",
-  "win32-x64": "goback-win32-x64-msvc",
+  "win32-x64": "goback-windows-x64",
 };
 
 function getBinaryPath() {

@@ -24,7 +24,7 @@ jobs:
             npm_package: goback-linux-x64-gnu
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            npm_package: goback-win32-x64-msvc
+            npm_package: goback-windows-x64
 
     runs-on: ${{ matrix.os }}
 
@@ -81,14 +81,14 @@ jobs:
 
       - name: Move packages
         run: |
-          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-windows-x64; do
             rm -rf npm/$pkg
             mv npm-packages/$pkg npm/$pkg
           done
 
       - name: Publish platform packages
         run: |
-          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-windows-x64; do
             cd npm/$pkg
             npm publish --access public --provenance || true
             cd ../..
