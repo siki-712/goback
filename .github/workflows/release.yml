@@ -24,7 +24,7 @@ jobs:
             npm_package: goback-linux-x64-gnu
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            npm_package: goback-win32-x64-msvc
+            npm_package: goback-windows-x64
 
     runs-on: ${{ matrix.os }}
 
@@ -42,12 +42,14 @@ jobs:
       - name: Prepare binary (Unix)
         if: matrix.os != 'windows-latest'
         run: |
+          mkdir -p npm/${{ matrix.npm_package }}/bin
           cp target/${{ matrix.target }}/release/goback npm/${{ matrix.npm_package }}/bin/goback
           chmod +x npm/${{ matrix.npm_package }}/bin/goback
 
       - name: Prepare binary (Windows)
         if: matrix.os == 'windows-latest'
         run: |
+          New-Item -ItemType Directory -Force -Path npm/${{ matrix.npm_package }}/bin
           cp target/${{ matrix.target }}/release/goback.exe npm/${{ matrix.npm_package }}/bin/goback.exe
 
       - name: Upload artifact
@@ -59,6 +61,9 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -76,7 +81,7 @@ jobs:
 
       - name: Move packages
         run: |
-          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-windows-x64; do
             rm -rf npm/$pkg
             mv npm-packages/$pkg npm/$pkg
           done
@@ -85,7 +90,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
+          for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-windows-x64; do
             cd npm/$pkg
             npm publish --access public || true
             cd ../..
