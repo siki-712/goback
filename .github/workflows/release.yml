@@ -61,6 +61,9 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -84,18 +87,14 @@ jobs:
           done
 
       - name: Publish platform packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-win32-x64-msvc; do
             cd npm/$pkg
-            npm publish --access public || true
+            npm publish --access public --provenance || true
             cd ../..
           done
 
       - name: Publish main package
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd npm/goback
-          npm publish --access public
+          npm publish --access public --provenance

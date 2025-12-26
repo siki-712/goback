@@ -1,6 +1,6 @@
 {
   "name": "goback",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Go back to a previous git branch",
   "repository": {
     "type": "git",
@@ -14,10 +14,10 @@
     "bin"
   ],
   "optionalDependencies": {
-    "goback-darwin-arm64": "0.1.5",
-    "goback-darwin-x64": "0.1.5",
-    "goback-linux-x64-gnu": "0.1.5",
-    "goback-win32-x64-msvc": "0.1.5"
+    "goback-darwin-arm64": "0.1.6",
+    "goback-darwin-x64": "0.1.6",
+    "goback-linux-x64-gnu": "0.1.6",
+    "goback-win32-x64-msvc": "0.1.6"
   },
   "keywords": [
     "git",
