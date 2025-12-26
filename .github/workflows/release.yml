@@ -87,14 +87,18 @@ jobs:
           done
 
       - name: Publish platform packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for pkg in goback-darwin-arm64 goback-darwin-x64 goback-linux-x64-gnu goback-windows-x64; do
             cd npm/$pkg
-            npm publish --access public --provenance || true
+            npm publish --access public || true
             cd ../..
           done
 
       - name: Publish main package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd npm/goback
-          npm publish --access public --provenance
+          npm publish --access public

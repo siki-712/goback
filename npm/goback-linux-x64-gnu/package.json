@@ -1,6 +1,6 @@
 {
   "name": "goback-linux-x64-gnu",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "goback binary for Linux x64 (glibc)",
   "os": ["linux"],
   "cpu": ["x64"],
